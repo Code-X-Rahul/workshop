@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { createdBy } = reqBody;
 
-    //check if user exists
     const workshops = await Workshop.find({ createdBy });
     if (!workshops) {
       return NextResponse.json(

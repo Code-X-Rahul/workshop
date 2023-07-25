@@ -15,10 +15,10 @@ const Addworkshop = ({refetch}:any) => {
     const [dialogOpen, setDialogOpen] = useState(false);
     return (
         <Dialog open={dialogOpen}>
-            <DialogTrigger onClick={() => setDialogOpen(!dialogOpen)} className="absolute bottom-4 right-4 bg-blue-700 p-2 rounded-full">
+            <DialogTrigger onClick={() => setDialogOpen(!dialogOpen)} className="dark fixed bottom-4 right-4 bg-blue-700 p-2 rounded-full z-50">
                 <PlusIcon className="text-3xl text-white" />
             </DialogTrigger>
-            <DialogContent className="bg-zinc-900 text-slate-50">
+            <DialogContent className="dark text-slate-50 flex flex-col justify-center items-center bg-black/10 w-[90%]">
                 <DialogHeader>
                     <DialogTitle className="text-3xl text-red-600 font-normal ">New Workshop</DialogTitle>
                 </DialogHeader>
