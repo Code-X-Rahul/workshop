@@ -1,6 +1,9 @@
+import { UserProvider } from '@/context/UserContext'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { WorkshopProvider } from '@/context/WorkshopContext'
+import QueryWrapper from '@/wrapper/queryWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <QueryWrapper>
+          <UserProvider>
+            <WorkshopProvider>
+              {children}
+            </WorkshopProvider>
+          </UserProvider>
+        </QueryWrapper>
+      </body>
     </html>
   )
 }
