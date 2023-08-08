@@ -1,15 +1,19 @@
-'use client'
-import { useAuth } from '@/context/UserContext'
-import { PlusCircleIcon, X } from 'lucide-react'
-import { FormEvent, useState, useEffect } from 'react';
-import { useWorkshop } from '@/context/WorkshopContext'
-import { createWorkshop, fetchWorkshops } from '@/helpers/workshop'
+"use client";
+import { useAuth } from "@/context/UserContext";
+import { PlusCircleIcon, X } from "lucide-react";
+import { FormEvent, useState, useEffect } from "react";
+import { useWorkshop } from "@/context/WorkshopContext";
+import { createWorkshop, fetchWorkshops } from "@/helpers/workshop";
+import { toast } from "react-hot-toast";
 
-const Form = ({ setDialogOpen, refetch }: {
-  setDialogOpen: (e: boolean) => void
-  refetch: any
+const Form = ({
+  setDialogOpen,
+  refetch,
+}: {
+  setDialogOpen: (e: boolean) => void;
+  refetch: any;
 }) => {
-  const { user } = useAuth()
+  const { user } = useAuth();
   const [workshop, setWorkshop] = useState({
     name: "",
     venue: "",
@@ -17,30 +21,36 @@ const Form = ({ setDialogOpen, refetch }: {
     email: "",
     type: "",
     date: "",
-    createdBy: user._id
-  })
-
+    createdBy: user._id,
+  });
+  const [isCreating, setIsCreating] = useState(false);
 
   const valueHandler = (e: any) => {
-    setWorkshop((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+    setWorkshop((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await createWorkshop(workshop, setDialogOpen)
+      setIsCreating(true);
+      await createWorkshop(workshop, setDialogOpen);
+      toast.success("Workshop created successfully");
       refetch();
     } catch (error: any) {
-      throw new Error(error)
+      toast.error(error.message);
+      throw new Error(error);
+    } finally {
+      setIsCreating(false);
     }
-  }
+  };
   return (
-    <form onSubmit={submitHandler} className='grid place-items-center'>
-
-      <div className='flex items-center justify-center'>
-        <label className='text-xl text-slate-100 p-2' htmlFor="name">Name</label>
+    <form onSubmit={submitHandler} className="grid place-items-center">
+      <div className="flex items-center justify-center">
+        <label className="text-xl text-slate-100 p-2" htmlFor="name">
+          Name
+        </label>
         <input
-          className='p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50'
+          className="p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50"
           type="text"
           name="name"
           id="name"
@@ -50,10 +60,12 @@ const Form = ({ setDialogOpen, refetch }: {
         />
       </div>
 
-      <div className='flex items-center justify-center'>
-        <label className='text-xl text-slate-100 p-2' htmlFor="email">Email</label>
+      <div className="flex items-center justify-center">
+        <label className="text-xl text-slate-100 p-2" htmlFor="email">
+          Email
+        </label>
         <input
-          className='p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50'
+          className="p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50"
           type="email"
           name="email"
           id="email"
@@ -63,10 +75,12 @@ const Form = ({ setDialogOpen, refetch }: {
         />
       </div>
 
-      <div className='flex items-center justify-center'>
-        <label className='text-xl text-slate-100 p-2' htmlFor="venue">Venue</label>
+      <div className="flex items-center justify-center">
+        <label className="text-xl text-slate-100 p-2" htmlFor="venue">
+          Venue
+        </label>
         <input
-          className='p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50'
+          className="p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50"
           type="text"
           name="venue"
           id="venue"
@@ -76,10 +90,12 @@ const Form = ({ setDialogOpen, refetch }: {
         />
       </div>
 
-      <div className='flex items-center justify-center'>
-        <label className='text-xl text-slate-100 p-2' htmlFor="url">Url</label>
+      <div className="flex items-center justify-center">
+        <label className="text-xl text-slate-100 p-2" htmlFor="url">
+          Url
+        </label>
         <input
-          className='p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50'
+          className="p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50"
           type="url"
           name="url"
           id="url"
@@ -89,10 +105,12 @@ const Form = ({ setDialogOpen, refetch }: {
         />
       </div>
 
-      <div className='flex items-center justify-center'>
-        <label className='text-xl text-slate-100 p-2' htmlFor="type">Type</label>
+      <div className="flex items-center justify-center">
+        <label className="text-xl text-slate-100 p-2" htmlFor="type">
+          Type
+        </label>
         <input
-          className='p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50'
+          className="p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50"
           type="text"
           name="type"
           id="type"
@@ -102,10 +120,12 @@ const Form = ({ setDialogOpen, refetch }: {
         />
       </div>
 
-      <div className='flex items-center self-start'>
-        <label className='text-xl text-slate-100 p-2' htmlFor="date">Date</label>
+      <div className="flex items-center self-start">
+        <label className="text-xl text-slate-100 p-2" htmlFor="date">
+          Date
+        </label>
         <input
-          className='p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50'
+          className="p-2 h-10 mx-4 bg-transparent border-b-2 border-red-600 outline-none text-slate-50"
           type="date"
           name="date"
           id="date"
@@ -114,18 +134,27 @@ const Form = ({ setDialogOpen, refetch }: {
           onChange={(e: any) => valueHandler(e)}
         />
       </div>
-      <div className='flex space-x-4 m-2'>
-        <button className='flex items-center justify-center gap-1 text-lg text-slate-50 bg-green-600 rounded-md p-2' type='submit'>
+      <div className="flex space-x-4 m-2">
+        <button
+          className="flex items-center justify-center gap-1 text-lg text-slate-50 bg-green-600 rounded-md p-2"
+          type="submit"
+          disabled={isCreating}
+        >
           Create
-          <PlusCircleIcon className='text-xl' />
+          <PlusCircleIcon className="text-xl" />
         </button>
-        <button onClick={() => setDialogOpen(false)} className='flex items-center justify-center gap-1 text-lg text-slate-100 bg-red-600 rounded-md p-2' type='button'>
+        <button
+          onClick={() => setDialogOpen(false)}
+          className="flex items-center justify-center gap-1 text-lg text-slate-100 bg-red-600 rounded-md p-2"
+          type="button"
+          disabled={isCreating}
+        >
           Cancel
-          <X className='text-xl' />
+          <X className="text-xl" />
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;

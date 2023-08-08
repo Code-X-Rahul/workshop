@@ -1,7 +1,7 @@
 "use client";
 import Addworkshop from "@/components/Addworkshop";
 import { useAuth } from "@/context/UserContext";
-import { fetchWorkshops } from "@/helpers/workshop";
+import { deleteWorkshop, fetchWorkshops } from "@/helpers/workshop";
 import { useQuery } from "react-query";
 
 import {
@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Delete } from "lucide-react";
+import ConfirmDialog from "@/components/ConfirmDialog";
 const Home = () => {
   const { user } = useAuth();
 
@@ -68,21 +69,15 @@ const Home = () => {
                     <span>{workshop.date}</span>
                   </p>
                 </CardContent>
-                <div className="absolute bottom-4 right-4 cursor-pointer flex space-x-2">
+                <div className="absolute bottom-4 right-4 cursor-pointer flex space-x-1">
                   <Button
                     className="bg-transparent text-sky-400 "
                     size={"icon"}
-                    variant={"outline"}
+                    variant={"ghost"}
                   >
                     <Edit className="w-5" />
                   </Button>
-                  <Button
-                    className="bg-transparent text-sky-400 hover:bg-red-600 hover:text-white"
-                    size={"icon"}
-                    variant={"outline"}
-                  >
-                    <Trash2Icon className=" w-5" />
-                  </Button>
+                  <ConfirmDialog _id={workshop._id} refetch={refetch} />
                 </div>
               </Card>
             ))}
