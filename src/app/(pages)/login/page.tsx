@@ -19,7 +19,8 @@ export default function LoginPage() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const onLogin = async () => {
+  const onLogin = async (e:any) => {
+    e.preventDefault();
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
@@ -59,13 +60,16 @@ export default function LoginPage() {
                 disabled={loading}
                 value={user.email}
                 onChange={(e: any) =>
-                  setUser({ ...user, email: e.target.value })
+                  setUser((prevUser) => ({
+                    ...prevUser,
+                    email: e.target.value,
+                  }))
                 }
               />
             </div>
             <div className="grid gap-1">
               <Label className="sr-only" htmlFor="email">
-                Email
+                Password
               </Label>
               <Input
                 id="password"
