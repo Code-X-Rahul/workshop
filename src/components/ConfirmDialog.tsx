@@ -25,7 +25,7 @@ const ConfirmDialog = ({ _id, refetch }: any) => {
       </DialogTrigger>
       <DialogContent className="dark text-slate-50 flex flex-col justify-center items-center bg-black/10 w-[90%]">
         <DialogHeader>
-          <DialogTitle className="text-3xl text-red-600 font-normal ">
+          <DialogTitle className="text-xl text-red-600 font-semibold ">
             Are you sure you want to delete this workshop?
           </DialogTitle>
         </DialogHeader>

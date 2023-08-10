@@ -13,6 +13,10 @@ const WorkshopSchema = new mongoose.Schema(
       required: [true, "Must Provide the Venue"],
     },
     type: String,
+    email: {
+      type: String,
+      required: [true, "Must Provide the Email"],
+    },
     url: {
       type: String,
       required: [true, "Must Provide the URL"],

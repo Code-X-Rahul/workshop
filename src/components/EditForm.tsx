@@ -1,22 +1,18 @@
 "use client";
 import { useAuth } from "@/context/UserContext";
-import { PlusCircleIcon, X, Edit } from "lucide-react";
-import { FormEvent, useState, useEffect, useLayoutEffect } from "react";
-import { useWorkshop } from "@/context/WorkshopContext";
-import {
-  createWorkshop,
-  fetchSingleWorkshop,
-  fetchWorkshops,
-  updateWorkshop,
-} from "@/helpers/workshop";
+import { PlusCircleIcon, X } from "lucide-react";
+import { FormEvent, useState, useLayoutEffect } from "react";
+import { fetchSingleWorkshop, updateWorkshop } from "@/helpers/workshop";
 import { toast } from "react-hot-toast";
 
-const Form = ({
+const EditForm = ({
   setDialogOpen,
   refetch,
+  _id,
 }: {
   setDialogOpen: (e: boolean) => void;
   refetch: any;
+  _id: string;
 }) => {
   const { user } = useAuth();
   const [workshop, setWorkshop] = useState({
@@ -30,27 +26,37 @@ const Form = ({
   });
   const [isCreating, setIsCreating] = useState(false);
 
+  useLayoutEffect(() => {
+    const fetch = async () => {
+      const data = await fetchSingleWorkshop(_id);
+      setWorkshop((prev) => ({ ...prev, ...data }));
+    };
+    fetch();
+  }, []);
+
   const valueHandler = (e: any) => {
     setWorkshop((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const submitHandler = async (e: FormEvent) => {
+  const updateHandler = async (e: FormEvent) => {
     e.preventDefault();
+    const loading = toast.loading("Updating Workshop...");
     try {
       setIsCreating(true);
-      await createWorkshop(workshop, setDialogOpen);
-      toast.success("Workshop created successfully");
+      await updateWorkshop(_id, workshop, setDialogOpen);
+      toast.dismiss(loading);
+      toast.success("Workshop updated successfully");
       refetch();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.dismiss(loading);
+      toast.error("failed to update workshop", error.message);
       throw new Error(error);
     } finally {
       setIsCreating(false);
     }
   };
-
   return (
-    <form onSubmit={submitHandler} className="grid place-items-center">
+    <form onSubmit={updateHandler} className="grid place-items-center">
       <div className="flex items-center justify-center">
         <label className="text-xl text-slate-100 p-2" htmlFor="name">
           Name
@@ -146,7 +152,7 @@ const Form = ({
           type="submit"
           disabled={isCreating}
         >
-          Create
+          Update
           {isCreating ? (
             <svg className="animate-spin h-5 w-5 ml-2" viewBox="0 0 24 24">
               <circle
@@ -181,4 +187,4 @@ const Form = ({
   );
 };
 
-export default Form;
+export default EditForm;
