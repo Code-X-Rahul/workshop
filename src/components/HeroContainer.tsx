@@ -9,7 +9,7 @@ import { CalendarIcon, WifiIcon } from "lucide-react";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import EditWorkshop from "@/components/EditWorkshop";
 
-const HeroContainer = ({ data, refetch }: any) => {
+const HeroContainer = ({ data, refetch, uid }: any) => {
   return (
     <main className="grid grid-cols-1 gap-3 p-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
       {data.data.length !== 0 &&
@@ -38,14 +38,16 @@ const HeroContainer = ({ data, refetch }: any) => {
                 <span>{workshop.date}</span>
               </p>
             </CardContent>
-            <div className="absolute bottom-4 right-4 cursor-pointer flex space-x-1">
-              <EditWorkshop
-                _id={workshop._id}
-                refetch={refetch}
-                {...workshop}
-              />
-              <ConfirmDialog _id={workshop._id} refetch={refetch} />
-            </div>
+            {workshop.createdBy === uid && (
+              <div className="absolute bottom-4 right-4 cursor-pointer flex space-x-1">
+                <EditWorkshop
+                  _id={workshop._id}
+                  refetch={refetch}
+                  {...workshop}
+                />
+                <ConfirmDialog uid={uid} _id={workshop._id} refetch={refetch} />
+              </div>
+            )}
           </Card>
         ))}
     </main>

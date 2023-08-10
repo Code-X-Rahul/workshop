@@ -7,11 +7,24 @@ connect();
 export async function PATCH(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { workshopId } = reqBody;
+    const { workshopId, createdBy } = reqBody;
     if (!workshopId) {
       return NextResponse.json(
         { error: "Please provide workshop Id" },
         { status: 500 }
+      );
+    }
+    if (!createdBy) {
+      return NextResponse.json(
+        { error: "Please provide user Id" },
+        { status: 500 }
+      );
+    }
+    const workshop = await Workshop.findOne({ _id: workshopId });
+    if (String(workshop.createdBy) !== createdBy) {
+      return NextResponse.json(
+        { error: "User not permitted to update." },
+        { status: 400 }
       );
     }
 

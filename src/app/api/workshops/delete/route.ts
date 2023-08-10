@@ -7,11 +7,24 @@ connect();
 export async function DELETE(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { workshopId } = reqBody;
+    const { workshopId, uid } = reqBody;
     if (!workshopId) {
       return NextResponse.json(
         { error: "Please provide workshop Id" },
-        { status: 500 }
+        { status: 400 }
+      );
+    }
+    if (!uid) {
+      return NextResponse.json(
+        { error: "User UnAuthenticated" },
+        { status: 400 }
+      );
+    }
+    const workshop = await Workshop.findOne({ _id: workshopId });
+    if (String(workshop.createdBy) !== uid) {
+      return NextResponse.json(
+        { error: "User not permitted to delete." },
+        { status: 400 }
       );
     }
 

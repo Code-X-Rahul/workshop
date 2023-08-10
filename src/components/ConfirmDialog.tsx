@@ -11,7 +11,7 @@ import { deleteWorkshop } from "@/helpers/workshop";
 import { Trash2Icon } from "lucide-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-const ConfirmDialog = ({ _id, refetch }: any) => {
+const ConfirmDialog = ({ _id, refetch,uid }: any) => {
   return (
     <Dialog>
       <DialogTrigger>
@@ -34,7 +34,7 @@ const ConfirmDialog = ({ _id, refetch }: any) => {
             className="bg-transparent text-sky-400 hover:bg-red-600 hover:text-white"
             size={"icon"}
             variant={"ghost"}
-            onClick={() => deleteWorkshop(_id, refetch)}
+            onClick={() => deleteWorkshop(_id, refetch,uid)}
           >
             Yes
           </Button>

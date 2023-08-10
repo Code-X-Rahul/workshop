@@ -1,12 +1,15 @@
 import { connect } from "@/dbConfig/dbConfig";
 import Workshop from "@/models/workshopModal";
-import {  NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
-export async function GET() {
+export async function POST(request: NextRequest) {
   try {
-    const workshops = await Workshop.find({});
+    const reqBody = await request.json();
+    const { createdBy } = reqBody;
+
+    const workshops = await Workshop.find({ createdBy });
     if (!workshops) {
       return NextResponse.json(
         { error: "workshop does not exist" },

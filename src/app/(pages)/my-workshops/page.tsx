@@ -2,14 +2,15 @@
 import Addworkshop from "@/components/Addworkshop";
 import HeroContainer from "@/components/HeroContainer";
 import { useAuth } from "@/context/UserContext";
-import { fetchAllWorkshops } from "@/helpers/workshop";
+import { fetchWorkshops } from "@/helpers/workshop";
 import { useQuery } from "react-query";
-const Home = () => {
+
+const MyWorkshops = () => {
   const { user } = useAuth();
 
   const { data, isError, isLoading, isSuccess, refetch }: any = useQuery({
-    queryKey: ["Allworkshops"],
-    queryFn: () => fetchAllWorkshops(),
+    queryKey: ["workshops", user._id],
+    queryFn: () => fetchWorkshops(user._id),
   });
 
   if (isLoading) return <h1>Loading...</h1>;
@@ -23,4 +24,4 @@ const Home = () => {
     );
   }
 };
-export default Home;
+export default MyWorkshops;
